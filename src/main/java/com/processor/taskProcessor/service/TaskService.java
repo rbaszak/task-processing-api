@@ -4,16 +4,17 @@ import com.processor.taskProcessor.domain.model.Task;
 import com.processor.taskProcessor.adapter.out.redis.RedisRepository;
 import com.processor.taskProcessor.domain.port.TaskServicePort;
 import com.processor.taskProcessor.exception.RedisUnavailableException;
+import com.processor.taskProcessor.exception.TaskNotExistsException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.redis.RedisConnectionFailureException;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 @Slf4j
 @Service
-@RequiredArgsConstructor
 public class TaskService implements TaskServicePort {
 
     private final RedisRepository redisRepository;
@@ -23,10 +24,16 @@ public class TaskService implements TaskServicePort {
 
     private long taskIdCounter = 0L;
 
-    public long createTask(String pattern, String input) {
+    public TaskService(RedisRepository redisRepository, MockTaskProcessor mockTaskProcessor){
+        this.redisRepository = redisRepository;
+        this.taskProcessor = mockTaskProcessor;
+        taskIdCounter = getLastTaskIdFromRedis();
+    }
+
+    public Long createTask(String pattern, String input) {
         try {
             log.debug("Received task data. Pattern: {}, Input: {}", pattern, input);
-            long taskId = taskIdCounter++;
+            Long taskId = ++taskIdCounter;
             redisRepository.writeTaskToRedis(taskId, "Created.");
             taskProcessor.processTaskAsynchronously(taskId);
             log.debug("Async task processing started.");
@@ -49,7 +56,20 @@ public class TaskService implements TaskServicePort {
     public Task checkTaskStatus(long taskId) {
         try{
             String taskData = redisRepository.readTaskFromRedis(taskId);
+            if (taskData == null)
+                throw new TaskNotExistsException(taskId);
             return new Task(taskId, taskData);
+        } catch (RedisConnectionFailureException e) {
+            log.error(REDIS_UNAVAILABLE_ERR_MSG);
+            throw new RedisUnavailableException(e);
+        }
+    }
+
+    private Long getLastTaskIdFromRedis() {
+        try{
+            Long lastId = redisRepository.readLastTaskFromRedis();
+            log.debug("Last ID stored in Redis: {}", lastId);
+            return lastId;
         } catch (RedisConnectionFailureException e) {
             log.error(REDIS_UNAVAILABLE_ERR_MSG);
             throw new RedisUnavailableException(e);

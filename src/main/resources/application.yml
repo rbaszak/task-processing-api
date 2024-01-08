@@ -1,6 +1,5 @@
 server:
   port: 8080
-
 spring:
   main:
     lazy-initialization: false
@@ -12,13 +11,17 @@ spring:
     health:
       status:
         order: DOWN,UP
-
 management:
   health:
     shutdown:
       enabled: true
-
 logging:
   level:
     root: INFO
     com.processor.taskProcessor.service.TaskService: DEBUG
+    com.processor.taskProcessor.service.MockTaskProcessor: DEBUG
+async:
+  executor:
+    core-pool-size: 2
+    max-pool-size: 10
+    queue-capacity: 25
