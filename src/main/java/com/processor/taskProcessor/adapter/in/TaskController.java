@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/tasks")
@@ -22,8 +23,10 @@ public class TaskController {
     private final TaskService taskService;
 
     @PostMapping("/create")
-    public ResponseEntity<Long> createTask(@RequestBody String taskData) {
-        long taskId = taskService.createTask(taskData);
+    public ResponseEntity<Long> createTask(@RequestBody Map<String, String> request) {
+        String pattern = request.get("pattern");
+        String input = request.get("input");
+        long taskId = taskService.createTask(pattern, input);
         return new ResponseEntity<>(taskId, HttpStatus.OK);
     }
 
@@ -33,9 +36,10 @@ public class TaskController {
         return new ResponseEntity<>(tasks, HttpStatus.OK);
     }
 
-    @PostMapping("/{taskId}/status")
-    public ResponseEntity<Task> checkTaskStatus(@PathVariable long taskId) {
+    @PostMapping("/status")
+    public ResponseEntity<String> checkTaskStatusAndResult(@RequestBody Map<String, Long> request) {
+        Long taskId = request.get("taskId");
         Task task = taskService.checkTaskStatus(taskId);
-        return new ResponseEntity<>(task, HttpStatus.OK);
+        return new ResponseEntity<>(task.toString(), HttpStatus.OK);
     }
 }

@@ -23,7 +23,7 @@ public class MockTaskProcessor {
                 throw new RuntimeException(e);
             }
             float percentage = (float) Math.floor((i + 1) * 100.0 / LOOPS_NUM);
-            redisRepository.writeTaskToRedis(taskId, "Completion: " + percentage + "%");
+            redisRepository.writeTaskToRedis(taskId, "COMPLETION: " + percentage + "%");
         });
         redisRepository.writeTaskToRedis(taskId, "DONE.");
     }

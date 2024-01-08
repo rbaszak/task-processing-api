@@ -23,9 +23,9 @@ public class TaskService implements TaskServicePort {
 
     private long taskIdCounter = 0L;
 
-    public long createTask(String taskData) {
+    public long createTask(String pattern, String input) {
         try {
-            log.debug("Received task data: {}", taskData);
+            log.debug("Received task data. Pattern: {}, Input: {}", pattern, input);
             long taskId = taskIdCounter++;
             redisRepository.writeTaskToRedis(taskId, "Created.");
             taskProcessor.processTaskAsynchronously(taskId);
