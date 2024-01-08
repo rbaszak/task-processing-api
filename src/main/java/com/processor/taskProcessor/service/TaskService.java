@@ -54,7 +54,7 @@ public class TaskService implements TaskServicePort {
     public Task checkTaskStatus(long taskId) {
         try{
             String taskData = redisRepository.readTaskFromRedis(taskId);
-            if (taskData != null) {
+            if (taskData == null) {
                 throw new TaskNotExistsException(taskId);
             } else
                 return new Task(taskId, taskData);
