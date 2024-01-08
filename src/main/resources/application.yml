@@ -1,0 +1,24 @@
+server:
+  port: 8080
+
+spring:
+  main:
+    lazy-initialization: false
+  redis:
+    host: localhost
+    port: 6379
+# We can add a few more properties to control max Redis connections etc.
+  boot:
+    health:
+      status:
+        order: DOWN,UP
+
+management:
+  health:
+    shutdown:
+      enabled: true
+
+logging:
+  level:
+    root: INFO
+
