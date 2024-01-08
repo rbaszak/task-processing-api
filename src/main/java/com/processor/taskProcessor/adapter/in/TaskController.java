@@ -24,6 +24,9 @@ public class TaskController {
 
     private final TaskService taskService;
 
+    private static final String NOT_NULL_MSG = "ID cannot be null";
+    private static final String NOT_FOUND_MSG = "Task with ID %s not found.";
+
     @PostMapping("/create")
     public ResponseEntity<Long> createTask(@RequestBody Map<String, String> request) {
         String pattern = request.get("pattern");
@@ -43,6 +46,12 @@ public class TaskController {
     @PostMapping("/status")
     public ResponseEntity<String> checkTaskStatusAndResult(@RequestBody Map<String, Long> request) {
         Long taskId = request.get("taskId");
+
+        if (taskId == null) {
+            log.error(NOT_NULL_MSG);
+            return new ResponseEntity<>(NOT_NULL_MSG, HttpStatus.BAD_REQUEST);
+        }
+
         Task task = taskService.checkTaskStatus(taskId);
         log.info("Retrieved task with ID: {}", taskId);
         return new ResponseEntity<>(task.toString(), HttpStatus.OK);

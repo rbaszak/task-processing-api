@@ -14,10 +14,12 @@ import java.util.stream.IntStream;
 public class MockTaskProcessor {
 
     private final RedisRepository redisRepository;
+    private final PatternMatchService patternMatchService;
     private static final int LOOPS_NUM = 8;
 
     @Async("threadPoolTaskExecutor")
-    public void processTaskAsynchronously(Long taskId) {
+    public void processTaskAsynchronously(Long taskId, String pattern, String input) {
+        String inputString = "Input: " + input + ", Pattern:" + pattern;
         IntStream.range(0, LOOPS_NUM).forEach(i -> {
             try {
                 Thread.sleep(1000);
@@ -25,9 +27,11 @@ public class MockTaskProcessor {
                 throw new RuntimeException(e);
             }
             float percentage = (float) Math.floor((i + 1) * 100.0 / LOOPS_NUM);
-            redisRepository.writeTaskToRedis(taskId, "COMPLETION: " + percentage + "%");
+            redisRepository.writeTaskToRedis(taskId, inputString + ";COMPLETION: " + percentage + "%");
         });
-        redisRepository.writeTaskToRedis(taskId, "DONE.");
-        log.debug("Processing of task {} DONE.", taskId);
+
+        String result = patternMatchService.match(pattern, input);
+        redisRepository.writeTaskToRedis(taskId, inputString + ";" + result);
+        log.debug("Processing of task {} is done. Result: {}", taskId, result);
     }
 }

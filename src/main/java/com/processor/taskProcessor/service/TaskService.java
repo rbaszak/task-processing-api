@@ -33,8 +33,10 @@ public class TaskService implements TaskServicePort {
             log.debug("Received task data. Pattern: {}, Input: {}", pattern, input);
             Long taskId = ++taskIdCounter;
             redisRepository.writeTaskToRedis(taskId, "Created.");
-            taskProcessor.processTaskAsynchronously(taskId);
+
+            taskProcessor.processTaskAsynchronously(taskId, pattern, input);
             log.debug("Async task processing started.");
+
             return taskId;
         } catch (RedisConnectionFailureException e) {
             log.error(REDIS_UNAVAILABLE_ERR_MSG);
