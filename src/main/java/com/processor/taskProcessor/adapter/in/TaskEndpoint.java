@@ -20,18 +20,17 @@ import java.util.Map;
 @RestController
 @RequestMapping("/tasks")
 @RequiredArgsConstructor
-public class TaskController {
+public class TaskEndpoint {
 
     private final TaskService taskService;
 
     private static final String NOT_NULL_MSG = "ID cannot be null";
-    private static final String NOT_FOUND_MSG = "Task with ID %s not found.";
 
     @PostMapping("/create")
     public ResponseEntity<Long> createTask(@RequestBody Map<String, String> request) {
-        String pattern = request.get("pattern");
         String input = request.get("input");
-        Long taskId = taskService.createTask(pattern, input);
+        String pattern = request.get("pattern");
+        Long taskId = taskService.createTask(input, pattern);
         log.info("Created task with ID: {}", taskId);
         return new ResponseEntity<>(taskId, HttpStatus.OK);
     }

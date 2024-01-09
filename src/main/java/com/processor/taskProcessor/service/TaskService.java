@@ -28,13 +28,13 @@ public class TaskService implements TaskServicePort {
         taskIdCounter = getLastTaskIdFromRedis();
     }
 
-    public Long createTask(String pattern, String input) {
+    public Long createTask(String input, String pattern) {
         try {
-            log.debug("Received task data. Pattern: {}, Input: {}", pattern, input);
+            log.debug("Received task data. Input: {}, Pattern: {}", input, pattern);
             Long taskId = ++taskIdCounter;
             redisRepository.writeTaskToRedis(taskId, "Created.");
 
-            taskProcessor.processTaskAsynchronously(taskId, pattern, input);
+            taskProcessor.processTaskAsynchronously(taskId, input, pattern);
             log.debug("Async task processing started.");
 
             return taskId;

@@ -18,7 +18,7 @@ public class MockTaskProcessor {
     private static final int LOOPS_NUM = 8;
 
     @Async("threadPoolTaskExecutor")
-    public void processTaskAsynchronously(Long taskId, String pattern, String input) {
+    public void processTaskAsynchronously(Long taskId, String input, String pattern) {
         String inputString = "Input: " + input + ", Pattern:" + pattern;
         IntStream.range(0, LOOPS_NUM).forEach(i -> {
             try {
@@ -30,7 +30,7 @@ public class MockTaskProcessor {
             redisRepository.writeTaskToRedis(taskId, inputString + ";COMPLETION: " + percentage + "%");
         });
 
-        String result = patternMatchService.match(pattern, input);
+        String result = patternMatchService.match(input, pattern);
         redisRepository.writeTaskToRedis(taskId, inputString + ";" + result);
         log.debug("Processing of task {} is done. Result: {}", taskId, result);
     }
