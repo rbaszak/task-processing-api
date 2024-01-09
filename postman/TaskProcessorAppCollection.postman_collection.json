@@ -19,7 +19,7 @@
 				],
 				"body": {
 					"mode": "raw",
-					"raw": "{\r\n    \"pattern\": \"ABC\",\r\n    \"input\": \"ABCDEF\"\r\n}",
+					"raw": "{\r\n    \"pattern\": \"BCD\",\r\n    \"input\": \"ABCD\"\r\n}",
 					"options": {
 						"raw": {
 							"language": "json"
