@@ -1,6 +1,6 @@
 package com.processor.taskProcessor.service;
 
-import com.processor.taskProcessor.adapter.out.redis.RedisRepository;
+import com.processor.taskProcessor.service.redis.RedisRepository;
 import com.processor.taskProcessor.config.TaskProcessorAppConfig;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.scheduling.annotation.Async;

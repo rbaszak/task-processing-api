@@ -1,7 +1,7 @@
 package com.processor.taskProcessor.service;
 
 import com.processor.taskProcessor.domain.model.Task;
-import com.processor.taskProcessor.adapter.out.redis.RedisRepository;
+import com.processor.taskProcessor.service.redis.RedisRepository;
 import com.processor.taskProcessor.domain.port.TaskServicePort;
 import com.processor.taskProcessor.exception.RedisUnavailableException;
 import com.processor.taskProcessor.exception.TaskNotExistsException;

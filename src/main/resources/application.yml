@@ -27,5 +27,5 @@ async:
     max-pool-size: 10
     queue-capacity: 25
 taskprocessor:
-  number-of-loops: 8 # Number of mock loops. Each loop waits 1000ms
-  max-typos:   #Empty or <0 defaults to length of pattern-1
+  number-of-loops: 8 # Number of mock loops. Each loop waits 1000ms. Defaults to 0
+  max-typos:   # Empty or <0 defaults to length of pattern-1

@@ -1,4 +1,4 @@
-package com.processor.taskProcessor.adapter.out.redis;
+package com.processor.taskProcessor.service.redis;
 
 import com.processor.taskProcessor.domain.model.Task;
 import lombok.RequiredArgsConstructor;

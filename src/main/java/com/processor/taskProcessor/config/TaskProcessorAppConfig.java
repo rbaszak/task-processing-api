@@ -12,7 +12,6 @@ import javax.validation.constraints.NotBlank;
 @Configuration
 @ConfigurationProperties(prefix = "taskprocessor")
 public class TaskProcessorAppConfig {
-    @NotBlank
-    private int numberOfLoops;
+    private int numberOfLoops = 0;
     private Integer maxTypos;
 }
