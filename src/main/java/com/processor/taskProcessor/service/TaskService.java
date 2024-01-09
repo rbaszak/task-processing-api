@@ -32,7 +32,7 @@ public class TaskService implements TaskServicePort {
         try {
             log.debug("Received task data. Input: {}, Pattern: {}", input, pattern);
             Long taskId = ++taskIdCounter;
-            redisRepository.writeTaskToRedis(taskId, "Created.");
+            redisRepository.writeTaskToRedis(taskId, "Input: " + input + ", Pattern: " + pattern + ";CREATED;AWAITING");
 
             taskProcessor.processTaskAsynchronously(taskId, input, pattern);
             log.debug("Async task processing started.");

@@ -20,8 +20,12 @@ logging:
     root: INFO
     com.processor.taskProcessor.service.TaskService: DEBUG
     com.processor.taskProcessor.service.MockTaskProcessor: DEBUG
+    com.processor.taskProcessor.service.PatternMatchService: DEBUG
 async:
   executor:
     core-pool-size: 2
     max-pool-size: 10
     queue-capacity: 25
+taskprocessor:
+  number-of-loops: 8 # Number of mock loops. Each loop waits 1000ms
+  max-typos:   #Empty or <0 defaults to length of pattern-1
