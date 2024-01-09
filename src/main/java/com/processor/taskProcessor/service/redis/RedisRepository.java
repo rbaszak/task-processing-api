@@ -49,10 +49,14 @@ public class RedisRepository {
     }
 
     public Long readLastTaskFromRedis() {
-        String lastTaskId = (String) redisTemplate.opsForValue().get(LAST_TASK_ID_KEYSPACE);
-        return Optional.ofNullable(lastTaskId)
-                .filter(str -> !str.isEmpty())
-                .map(Long::parseLong)
-                .orElse(0L);
+        if (redisTemplate.opsForValue() == null) {
+          return 0L;
+        } else {
+            String lastTaskId = (String) redisTemplate.opsForValue().get(LAST_TASK_ID_KEYSPACE);
+            return Optional.ofNullable(lastTaskId)
+                    .filter(str -> !str.isEmpty())
+                    .map(Long::parseLong)
+                    .orElse(0L);
+        }
     }
 }

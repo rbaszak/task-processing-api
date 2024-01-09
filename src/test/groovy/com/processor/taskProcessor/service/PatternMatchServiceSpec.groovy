@@ -2,7 +2,12 @@ package com.processor.taskProcessor.service
 
 import com.processor.taskProcessor.application.TaskProcessorApplication
 import org.springframework.beans.factory.annotation.Autowired
+import org.springframework.beans.factory.annotation.Qualifier
 import org.springframework.boot.test.context.SpringBootTest
+import org.springframework.boot.test.mock.mockito.MockBean
+import org.springframework.data.redis.core.HashOperations
+import org.springframework.data.redis.core.RedisKeyValueAdapter
+import org.springframework.data.redis.core.RedisTemplate
 import spock.lang.Specification
 
 @SpringBootTest(classes = TaskProcessorApplication)
@@ -10,6 +15,17 @@ class PatternMatchServiceSpec extends Specification {
 
 	@Autowired
 	PatternMatchService patternMatchService
+
+	@MockBean
+	@Qualifier("redisTemplate")
+	RedisTemplate<String, Object> redisTemplate;
+
+	@MockBean
+	HashOperations<String, Object, Object> hashOpertaions;
+
+	@MockBean
+	RedisKeyValueAdapter redisKeyValueAdapter;
+
 
 	def "patternMatcher matches simple result correctly"() {
 		given:

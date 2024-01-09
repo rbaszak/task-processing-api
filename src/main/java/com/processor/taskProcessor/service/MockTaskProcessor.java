@@ -24,7 +24,7 @@ public class MockTaskProcessor {
 
     @Async("threadPoolTaskExecutor")
     public void processTaskAsynchronously(Long taskId, String input, String pattern) {
-        String inputString = "Input: " + input + ", Pattern:" + pattern;
+        String inputString = "Input: " + input + ", Pattern: " + pattern;
         IntStream.range(0, loopsNum).forEach(i -> {
             try {
                 Thread.sleep(1000);
